@@ -1,0 +1,181 @@
+*wikidown.txt*  Minimal markdown-based wiki
+
+                              ╔╦╦╦╦╗╔╦═╗
+                              ║║║╠╣╠╬╬╗╠═╦╦╦╦═╦╗
+                              ║║║║║═╣╠╝║╬║║║║║║║
+                              ╚══╩╩╩╩╩═╩═╩══╩╩═╝
+
+Adam Labbe
+https://www.github.com/adamatom/wikidown
+
+CONTENTS                                                   *wikidown-contents*
+
+Introduction                  |wikidown-introduction|
+Commands                      |wikidown-commands|
+Configuration                 |wikidown-configuration|
+
+
+==============================================================================
+INTRODUCTION
+                                                       *wikidown-introduction*
+
+WikiDown is a Vim plugin that provides single-author markdown wiki. The
+markdown files can be published to HTML through pandoc.
+
+The design goals are:
+
+* Operate with markdown files.
+* No dependence on a new filetype, let people bring their markdown tools.
+* Jump to documents through links.
+* Support for multiple wikis.
+* External tooling for publishing to HTML.
+
+==============================================================================
+COMMANDS                                      *:WikiDown*  *wikidown-commands*
+
+The |:WikiDown| command takes a single parameter, the name of the wiki to
+load. This name is defined in the |wikidown-configuration|. This command
+activtes the given wiki. Activation opens the index file for the wiki.
+>
+    :WikiDown 'wiki_name'
+<
+
+Example mappings for loading different wikis:
+>
+    nmap <silent><unique> <leader>w1 :WikiDown 'work'<CR>
+    nmap <silent><unique> <leader>w2 :WikiDown 'home'<CR>
+    nmap <silent><unique> <leader>w3 :WikiDown 'website'<CR>
+<
+
+                                                            *:WikiDownPublish*
+This command publishes the wiki as HTML to the html path defined in the
+|wikidown-configuration.|
+
+Map to: <Plug>(WikiDownPublish)
+>
+    nmap <silent><unique><buffer> <leader>wp <Plug>(WikiDownPublish)
+<
+
+                                                            *:WikiDownEditLog*
+Create or modify a file with today's timestamp.
+Map to: <Plug>(WikiDownEditLog)
+>
+    nmap <silent><unique><buffer> <leader>wl <Plug>(WikiDownEditLog)
+<
+
+                                                         *:WikiDownCreateLink*
+Convert the visual text selection into a markdown link that links to a file
+named after the visual selection.
+Map to: <Plug>(WikiDownCreateLink)
+
+                                                           *:WikiDownNextLink*
+Jump to the next instance of a markdown link.
+Map to: <Plug>(WikiDownNextLink)
+>
+    nmap <silent><unique><buffer> <tab> <Plug>(WikiDownNextLink)
+<
+
+                                                           *:WikiDownPrevLink*
+Jump to the previous instance of a markdown link.
+Map to: <Plug>(WikiDownPrevLink)
+>
+    nmap <silent><unique><buffer> <s-tab> <Plug>(WikiDownPrevLink)
+<
+
+                                                         *:WikiDownFollowLink*
+                                                    *:WikiDownFollowLinkSplit*
+                                                   *:WikiDownFollowLinkVSplit*
+                                                      *:WikiDownFollowLinkTab*
+Follow the link the cursor is currently sitting on.
+Map to: <Plug>(WikiDownFollowLink)
+Map to: <Plug>(WikiDownFollowLinkSplit)
+Map to: <Plug>(WikiDownFollowLinkVSplit)
+Map to: <Plug>(WikiDownFollowLinkTab)
+>
+    nmap <silent><unique><buffer> <CR> <Plug>(WikiDownFollowLink)
+<
+
+
+                                                     *:WikiDownCreateOrFollow*
+                                                *:WikiDownCreateOrFollowSplit*
+                                               *:WikiDownCreateOrFollowVSplit*
+                                                  *:WikiDownCreateOrFollowTab*
+If the current cursor is sitting on a link, follow it. Else create a new
+markdown link from the visual selection.
+Map to: <Plug>(WikiDownCreateOrFollow)
+Map to: <Plug>(WikiDownCreateOrFollowSplit)
+Map to: <Plug>(WikiDownCreateOrFollowVSplit)
+Map to: <Plug>(WikiDownCreateOrFollowTab)
+>
+    vmap <silent><unique><buffer> <CR> <Plug>(WikiDownCreateOrFollow)
+<
+
+                                                             *:WikiDownGoBack*
+Navigate back to the markdown file that linked to the current markdown file.
+Map to: <Plug>(WikiDownGoBack)
+>
+    nmap <silent><unique><buffer> <backspace> <Plug>(WikiDownGoBack)
+<
+
+                                                         *:WikiDownDeletePage*
+If the user selects "y" at the prompt: delete the active file and navigate
+back.
+Map to: <Plug>(WikiDownDeletePage)
+>
+    nmap <silent><unique><buffer> <leader>wD <Plug>(WikiDownDeletePage)
+<
+
+==============================================================================
+CONFIGURATION                      *g:wikidown_wikis* *wikidown-configuration*
+
+Wikis are defined through the |g:wikidown_wikis| dictionary.
+>
+    g:wikidown_wikis = { 'wiki1': {...}, 'wiki2': {...}}
+<
+
+Where the items of the dictionary is another dictionary with the following
+keys:
+>
+    g:wikidown_wikis = {
+        \ 'wiki1': {
+        \     'path': '~/projects/notes_wiki',
+        \     'path_html': '~/projects/notes_wiki/html',
+        \     'index_file': 'index.md',
+        \     'log_subdir': 'log',
+        \     'ignore_html': 'about.html contact.html',
+        \     'author': 'Adam',
+        \     'css': ''},
+}
+
+Path~
+Path to the root of the wiki.
+
+path_html~
+Path to export HTML.
+
+index_file~
+File to consider the top index file for the wiki. Path is relative to the
+root.
+
+log_subdir~
+Path, relative to the root, to store daily log pages.
+
+ignore_html~
+Files to ignore when cleaning out HTML path before publishing.
+
+author~
+Author to provide to pandoc when publishing.
+
+css~
+File to give to pandoc when publishing to HTML. Path is relative to the root.
+
+                                                     *g:wikidown_default_maps*
+If set to 1, configure the default key maps.
+
+                                                            *g:wikidown_debug*
+If set to 1, output verbose debug message. If set to 2, output very verbose
+debug messages.
+
+
+
+vim:tw=78:sw=8:ts=8:ft=help:norl
