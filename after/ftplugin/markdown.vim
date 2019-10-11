@@ -19,11 +19,11 @@ if exists('g:wikidown_default_maps') && g:wikidown_default_maps
     endif
 
     if !hasmapto('<Plug>(WikiDownNextLink)')
-        nmap <silent><unique><buffer> <tab> <Plug>(WikiDownNextLink)
+        nmap <silent><unique><buffer> <c-n> <Plug>(WikiDownNextLink)
     endif
 
     if !hasmapto('<Plug>(WikiDownPrevLink)')
-        nmap <silent><unique><buffer> <s-tab> <Plug>(WikiDownPrevLink)
+        nmap <silent><unique><buffer> <c-p> <Plug>(WikiDownPrevLink)
     endif
 
     if !hasmapto('<Plug>(WikiDownGoBack)')
